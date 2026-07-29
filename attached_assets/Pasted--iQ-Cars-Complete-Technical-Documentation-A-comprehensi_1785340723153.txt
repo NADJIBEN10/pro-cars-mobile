@@ -1,0 +1,475 @@
+🚗 iQ Cars — Complete Technical Documentation
+A comprehensive blueprint of the iQ Cars web platform, prepared so another AI (Replit AI) can rebuild it as a production-ready React Native + Expo mobile app.
+
+1. Project Overview
+Name: iQ Cars Type: Automotive marketplace (web app, built on TanStack Start). Tagline: "Iraq & Kurdistan's largest car marketplace."
+
+Main idea: A trilingual (English / Arabic / Kurdish) marketplace where private sellers and dealers list vehicles, and buyers can search, compare, save, chat with sellers, and read editorial content (guides, news, videos).
+
+Purpose / problems solved:
+
+Fragmented car buying/selling market in Iraq & Kurdistan — no dominant trusted online hub.
+Buyers can't easily filter thousands of listings, compare specs, or verify dealers.
+Sellers (both private and 1,000+ showrooms) lack a professional listing platform.
+Language barrier — supports EN / AR / KU with RTL layout.
+Target users:
+
+Buyers – browsing, filtering, saving, contacting sellers.
+Private sellers – posting one-off vehicle listings.
+Dealers / Showrooms – managing inventory, subscriptions, analytics.
+Moderators / Admins – handling reports, verifying dealers.
+Main features (delivered v1):
+
+Multilingual UI with runtime language switch + RTL.
+Hero + advanced search bar on the home page.
+Popular cars, categories, brand grid, testimonial-style CTA sections.
+Full advanced search page with faceted filters + sort.
+Car detail page (gallery, specs, features, seller card, similar cars).
+Compare cars side-by-side (up to N).
+Sell Car multi-step wizard.
+Auth (email/password + Google via Lovable Cloud broker).
+Personal Dashboard (my listings, favorites) + Favorites/Watchlist.
+Editorial pages: Guide, News, Videos.
+Theme toggle (light/dark) + persistent language.
+Toast notifications (sonner).
+Business logic highlights:
+
+Listings have lifecycle: draft → pending → active → sold/expired/rejected.
+Sellers are private or dealer; dealers hold subscriptions (free/basic/pro/enterprise) that cap listing quota.
+Prices stored in USD (price_usd) with optional IQD mirror.
+Every price change is logged (car_price_history) via DB trigger.
+Favorites, saved searches, conversations, messages, notifications, reports, dealer reviews all supported at the schema level.
+Role model uses a separate user_roles table + has_role() security-definer function (no role columns on profiles — anti-privilege-escalation).
+2. How It Was Built
+2.1 Tech stack
+Layer	Choice
+Framework	TanStack Start v1 (React 19, file-based routing, SSR, server functions)
+Build tool	Vite 7
+Styling	Tailwind CSS v4 (native @import, @theme tokens in src/styles.css)
+UI primitives	shadcn/ui (Radix under the hood) — accordion, dialog, dropdown, select, tabs, toast, etc.
+Icons	lucide-react
+Animation	framer-motion + tw-animate-css
+Forms	react-hook-form + zod validation
+Data fetching	@tanstack/react-query
+Backend	Lovable Cloud (managed Supabase: Postgres + Auth + Storage)
+Auth broker	@lovable.dev/cloud-auth-js (Google OAuth)
+Charts	recharts
+Carousel	embla-carousel-react
+Toasts	sonner
+Runtime	Cloudflare Workers (edge) via TanStack Start server entry
+2.2 Folder structure
+src/
+├── assets/
+│   └── hero-car.jpg                # hero background image
+├── components/
+│   ├── CarCard.tsx                 # reusable car tile
+│   ├── Footer.tsx                  # global footer
+│   ├── Header.tsx                  # nav + lang/theme switch
+│   ├── SearchBar.tsx               # advanced search bar (home)
+│   └── ui/                         # shadcn/ui components (button, input, tabs, sheet, dialog, etc.)
+├── hooks/
+│   └── use-mobile.tsx              # useIsMobile()
+├── integrations/
+│   ├── lovable/index.ts            # Lovable Auth broker (Google OAuth)
+│   └── supabase/
+│       ├── client.ts               # browser Supabase client (auto-generated)
+│       ├── client.server.ts        # service-role admin client (server-only)
+│       ├── auth-middleware.ts      # requireSupabaseAuth for server fns
+│       ├── auth-attacher.ts        # attaches bearer token to server fn calls
+│       └── types.ts                # generated DB types
+├── lib/
+│   ├── auth.tsx                    # AuthProvider + useAuth() context
+│   ├── i18n.tsx                    # I18nProvider + useI18n() (EN/AR/KU + RTL)
+│   ├── favorites.ts                # localStorage watchlist (useFavorites hook)
+│   ├── mock-data.ts                # seed CARS, BRANDS, CATEGORIES, CITIES
+│   ├── utils.ts                    # cn() classnames helper
+│   ├── error-capture.ts, error-page.ts, lovable-error-reporting.ts
+├── routes/                         # file-based routes (TanStack Router)
+│   ├── __root.tsx                  # root layout, providers, Header/Footer/Toaster
+│   ├── index.tsx                   # / home
+│   ├── search.tsx                  # /search
+│   ├── car.$id.tsx                 # /car/:id detail
+│   ├── compare.tsx                 # /compare
+│   ├── sell.tsx                    # /sell wizard
+│   ├── auth.tsx                    # /auth sign in / sign up
+│   ├── dashboard.tsx               # /dashboard (user)
+│   ├── favorites.tsx               # /favorites
+│   ├── guide.tsx, news.tsx, videos.tsx
+├── router.tsx                      # createRouter() + QueryClient
+├── start.ts                        # server middleware (attachSupabaseAuth + errorMiddleware)
+├── server.ts                       # Worker fetch handler
+├── styles.css                      # Tailwind v4 tokens + design system
+└── routeTree.gen.ts                # generated — do not edit
+2.3 How it connects
+server.ts → boots TanStack Start server entry on Cloudflare Workers.
+start.ts → registers attachSupabaseAuth (adds bearer token to server-fn calls) + error middleware.
+router.tsx → creates the router with a shared QueryClient.
+routes/__root.tsx → wraps every page with <QueryClientProvider>, <I18nProvider>, <AuthProvider>, <Header>, <Outlet/>, <Footer/>, <Toaster/>, and a single supabase.auth.onAuthStateChange listener that invalidates the router + query cache on SIGNED_IN/OUT/USER_UPDATED.
+Client Supabase calls go through @/integrations/supabase/client. Server calls use requireSupabaseAuth in server functions.
+3. Pages / Screens (top to bottom)
+3.1 / — Home (src/routes/index.tsx)
+Hero (full-bleed): background image hero-car.jpg with dark gradient overlay, heroTitle + heroSub from i18n, primary CTA "Search cars" + secondary "Sell your car".
+Advanced SearchBar overlapping the hero (brand, model, year from/to, price from/to, fuel, city, Search button).
+Popular Cars grid: 8 <CarCard/> items, "View all" → /search.
+Categories section: horizontal card grid (SUV, Sedan, Truck, Coupe…). Icons from lucide.
+Popular Brands logo grid.
+CTA banner — "Sell your car" (gradient card).
+Framer-motion fade/slide-in for section entrance.
+Loading/empty/error: currently uses static mock; sections always render.
+3.2 /search — Advanced Search
+Left column: Filters sidebar (brand, model, year range, price range, mileage range, fuel, transmission, city, seller type). On mobile becomes a <Sheet> (drawer).
+Right column: Results toolbar (result count + sort dropdown: Newest / Price low→high / Price high→low) then responsive grid of <CarCard/>.
+Empty state: illustration + "No cars match your filters".
+Loading: skeleton grid.
+3.3 /car/$id — Car Detail
+Gallery (embla carousel) with thumbnails.
+Header row: title, price (USD, IQD), badges (dealer/private, verified).
+Key specs grid: year, mileage, fuel, transmission, engine, HP, body, color, city.
+Description, Features chips.
+Seller card: avatar, name, city, Call / WhatsApp / Message buttons.
+Similar cars grid at bottom.
+Actions: Save to Watchlist (heart), Share, Report.
+3.4 /compare — Compare
+Slot selector at top (Add car 1, 2, 3…).
+Side-by-side table of specs; differing rows highlighted.
+Empty: prompt to add cars.
+3.5 /sell — Sell Car Wizard
+Multi-step form (Tabs / progress bar):
+
+Basics (brand, model, year, category)
+Specs (fuel, transmission, engine, mileage, color)
+Media (image uploader placeholder)
+Price & description
+Contact & city
+Review & publish → toast "Listing submitted for review".
+3.6 /auth — Authentication
+Logo, tabs Sign in / Create account.
+Zod-validated form (email, password ≥ 8, name for signup).
+"Continue with Google" via lovable.auth.signInWithOAuth("google", {redirect_uri: origin}).
+Redirects to /dashboard on success.
+3.7 /dashboard — User Dashboard
+Greeting with display name.
+Cards: My Listings, Favorites count, Messages, Saved searches.
+Tabs: Listings / Favorites / Messages / Settings.
+3.8 /favorites — Watchlist
+Heading + count.
+Grid of saved <CarCard/> (from useFavorites localStorage hook).
+Empty state with CTA to /search.
+3.9 /guide, /news, /videos — Editorial
+List/grid of article cards (mock data).
+Each card: cover, title, excerpt, date, read time.
+Placeholder detail pages planned for v2.
+Global chrome (all pages)
+Header: logo, primary nav (Home, Guide, News, Videos, Sell Car), language switcher (EN/AR/KU), theme toggle (light/dark), sign in / avatar dropdown, mobile hamburger <Sheet>.
+Footer: brand blurb, columns (Marketplace / Company / Legal / Support), social icons, copyright.
+4. UI / UX Design System
+4.1 Colors (defined in src/styles.css via OKLCH; approximate HEX)
+Light theme
+
+Token	OKLCH	~HEX
+background	0.99 0.005 250	#FBFBFD
+foreground	0.16 0.04 260	#1B1D2E
+surface	0.97 0.008 250	#F3F4F8
+card	1 0 0	#FFFFFF
+primary	0.42 0.16 260	#3A3AA8 (deep indigo)
+primary-glow	0.58 0.19 255	#5A6BEA
+accent	0.68 0.20 40	#F0803B (warm orange)
+destructive	0.60 0.24 27	#E63A2F
+success	0.65 0.16 155	#3DBB7A
+warning	0.78 0.16 75	#E8B646
+border	0.92 0.012 255	#E4E6EC
+muted-foreground	0.50 0.03 258	#767B8C
+Dark theme
+
+Token	~HEX
+background	#141826
+card	#1E2233
+primary	#7A8CF0
+primary-glow	#9AA9F5
+foreground	#F3F4F8
+Gradients
+
+--gradient-hero: dark indigo → violet → warm orange (135°).
+--gradient-primary: primary → primary-glow.
+--gradient-accent: warm gold → orange.
+Shadows
+
+--shadow-elegant: 0 20px 60px -20px color-mix(primary 35%, transparent) (glow under hero cards).
+--shadow-card: subtle 2-layer card lift.
+4.2 Typography
+Display font: Sora (headings, brand).
+Body font: Inter (UI, paragraphs).
+Loaded via <link> tags in __root.tsx head.
+Scale (Tailwind defaults): H1 text-4xl/5xl font-bold, H2 text-2xl/3xl font-semibold, body text-sm/base, muted secondary text uses text-muted-foreground.
+Weights used: 400 / 500 / 600 / 700.
+4.3 Components
+Buttons: shadcn Button variants — default (primary gradient), outline, ghost, destructive, secondary, sizes sm/default/lg/icon. Radius rounded-md (0.75rem base).
+Inputs: Input, Textarea, Select, Checkbox, RadioGroup, Slider, Switch, Label — all Radix-based.
+Cards: white/dark surface, rounded-2xl, shadow-card, border border-border, hover lifts (transition-transform hover:-translate-y-0.5).
+CarCard: 16:10 image, gradient overlay, heart favorite button top-right, price + title + specs row, city chip.
+Nav: sticky header with backdrop-blur; <Sheet> slide-out on mobile.
+Modals: Dialog (centered), Sheet (side drawer), AlertDialog (destructive confirms).
+Tabs: rounded pill list, active state uses primary bg.
+Tables: shadcn Table with zebra rows for Compare.
+Toasts: sonner (top-right, dismissable).
+4.4 Spacing / radius
+Base radius --radius: 0.75rem → sm 0.5, md 0.65, lg 0.75, xl 1, 2xl 1.25.
+Grid gap gap-4/5/6; page padding px-4 md:px-6 lg:px-8; max content width max-w-7xl mx-auto.
+Responsive breakpoints: default Tailwind (sm 640, md 768, lg 1024, xl 1280, 2xl 1536).
+5. Assets
+src/assets/hero-car.jpg — hero background on /.
+Icons: lucide-react (Car, Heart, Search, Filter, Sun, Moon, Globe, User, Menu, Phone, MessageCircle, ChevronRight, Star, MapPin, Fuel, Gauge, Settings…).
+Brand logos: currently placeholder text/emoji in mock data (brands.logo_url field ready for real logos).
+No videos shipped; /videos page uses cover thumbnails from mock data.
+Illustrations: none — empty states use lucide icons at large size.
+6. Database & Backend
+Provider: Lovable Cloud (Supabase Postgres + Auth + Storage + Edge).
+
+6.1 Enums
+app_role: admin, moderator, dealer, user
+fuel_type: petrol, diesel, hybrid, electric
+listing_status: draft, pending, active, sold, expired, rejected
+notification_kind: message, listing, saved_search, price_drop, system
+report_status: open, reviewing, resolved, dismissed
+seller_type: dealer, private
+subscription_status: trialing, active, past_due, canceled
+subscription_tier: free, basic, pro, enterprise
+transmission_type: automatic, manual
+6.2 Tables (public schema)
+Table	Key fields	Purpose
+profiles	id (=auth.uid), display_name, avatar_url, phone, city_id, preferred_language	User profile, auto-created on signup
+user_roles	user_id, role (app_role)	Roles, checked via has_role()
+brands	slug, name, logo_url, sort_order	Master brands
+car_models	brand_id, slug, name	Brand→models
+categories	slug, label, icon	SUV/Sedan/Truck/Coupe/etc
+cities	slug, name_en/ar/ku, country_code (default IQ)	Location taxonomy
+cars	owner_user_id, dealer_id, seller_type, status, brand/model/category, title, description, year, mileage_km, price_usd, price_iqd, color, fuel, transmission, engine_cc, engine_label, horsepower, body_type, city_id, vin, features[], cover_image_url, views_count, favorites_count, published_at, expires_at	Core listings
+car_images	car_id, url, sort_order, is_cover	Gallery images
+car_videos	car_id, url, thumbnail_url	Optional walkarounds
+car_price_history	car_id, price_usd, changed_at	Audit trail (auto via trigger log_car_price_change)
+dealers	owner_user_id, slug, name, description, logo_url, cover_url, city_id, address, phone, whatsapp, website, verified, rating_avg, rating_count	Showroom profiles
+dealer_reviews	dealer_id, reviewer_user_id, rating, comment	Public reviews
+subscriptions	dealer_id, tier, status, listing_quota, current_period_*, provider info	Paid plans
+favorites	user_id, car_id	Saved listings (composite PK)
+saved_searches	user_id, name, query (jsonb), alerts_enabled, last_notified_at	Alert on new matches
+conversations	car_id, buyer_user_id, seller_user_id, last_message_at	Chat threads
+messages	conversation_id, sender_user_id, body, read_at	Chat messages
+notifications	user_id, kind, title, body, link, read_at	Bell dropdown
+reports	reporter_user_id, car_id, reason, details, status	Abuse reports
+audit_logs	actor_user_id, action, entity_type, entity_id, metadata	Admin trail
+6.3 DB functions / triggers
+handle_new_user() — trigger on auth.users: inserts a profiles row + default user_roles row.
+has_role(uuid, app_role) — SECURITY DEFINER, checks membership without RLS recursion.
+log_car_price_change() — trigger inserting car_price_history on insert/price update.
+set_updated_at() — generic trigger for updated_at columns.
+6.4 RLS summary
+Read-only public: brands, car_models, categories, cities, car_images, car_videos, car_price_history, dealers, dealer_reviews, profiles.
+cars: public SELECT only when status='active'; owner has full CRUD; admin/moderator override.
+favorites, saved_searches, notifications, messages, conversations: strictly owner/participant scoped via auth.uid().
+reports: users can create, only mods/admins can read.
+user_roles: readable only by self; writes locked (roles assigned server-side).
+6.5 Auth
+Supabase Auth. Email/password + Google via Lovable OAuth broker.
+Session in localStorage; bearer token attached to server fns by attachSupabaseAuth.
+Signup trigger seeds profile + user role automatically.
+6.6 Storage
+Buckets to be created for car-images, dealer-logos, avatars (Storage panel — not yet provisioned in v1).
+6.7 APIs
+No custom edge functions — TanStack createServerFn handles server-side reads/writes with requireSupabaseAuth middleware.
+External webhooks/cron would live under src/routes/api/public/*.
+7. Feature Documentation
+Feature	UX	Technical
+Multi-language + RTL	Header dropdown EN/AR/KU; persists to localStorage; flips dir=rtl on Arabic/Kurdish	src/lib/i18n.tsx — I18nProvider with DICT map, sets document.documentElement.dir/lang
+Theme toggle	Sun/moon button in header	Adds/removes .dark class on <html>; tokens in styles.css
+Search	Home hero SearchBar + /search full filters	URL query params → filter cars via Supabase query (currently mock in v1)
+Filters	Sidebar with selects/sliders/checkboxes; mobile Sheet	Local state → search params
+Favorites	Heart on CarCard, /favorites page	useFavorites() reads/writes iq-favorites in localStorage, dispatches custom event to sync tabs
+Auth	/auth email/password + Google	supabase.auth.signInWithPassword / signUp; lovable.auth.signInWithOAuth("google"); redirects to /dashboard
+Sell wizard	Multi-step form on /sell	react-hook-form + zod; final submit will insert into cars (status pending) + upload images to Storage
+Compare	Add up to N cars, see side-by-side	Selected IDs held in state; grid diff highlighting
+Dashboard	Overview cards + tabs	Reads cars where owner_user_id = auth.uid(), favorites, messages
+Messaging (schema-ready)	Buyer → Seller chat per car	conversations + messages tables with participant RLS; realtime channel per conversation
+Notifications (schema-ready)	Bell in header	notifications table, mark-read via read_at
+Dealer subscriptions (schema-ready)	Tiers gate listing quota	subscriptions table joined to dealers; Stripe/Paddle integration planned
+Price history	Chart on car detail	Reads car_price_history (auto-populated by trigger)
+Reports	"Report" button on listing	Insert into reports (open status)
+AI features (planned hooks)	Price estimator, VIN scan, description writer	Would call Lovable AI Gateway via createServerFn
+Content	Guide / News / Videos lists	Currently static mock; can be moved to a content_articles table later
+8. User Flows
+Buyer
+
+Land on / → scan hero, popular cars.
+Use SearchBar or click category → /search?brand=….
+Filter/sort results → click card → /car/:id.
+Save to Watchlist (heart) → prompted to sign in if not authed.
+Click Call/WhatsApp → device dial/WhatsApp intent. Click Message → creates conversation, opens chat.
+Optionally: add to /compare (up to 3-4 cars).
+Private seller
+
+/auth → create account (auto profile + user role).
+Click "Sell Car" → /sell wizard → steps 1-6 → submit.
+Listing enters pending. After moderation → active.
+Manage in /dashboard (edit price, mark sold, delete).
+Dealer
+
+Same signup, then requests dealer upgrade (admin sets dealer role + creates dealers row + subscriptions row).
+Manages fleet from dealer dashboard (planned /dashboard/dealer).
+Receives buyer messages, showcases profile at /dealer/:slug.
+Admin / Moderator
+
+Sign in → /admin (planned).
+Review reports, approve/reject cars, verify dealers, view audit_logs.
+OAuth flow
+
+User taps "Continue with Google" → lovable.auth.signInWithOAuth("google", { redirect_uri: origin }).
+Broker returns tokens → supabase.auth.setSession() → redirect /dashboard.
+9. Web → Mobile Conversion Guide (React Native + Expo)
+9.1 Stays the same
+Business logic, data model, Supabase backend (Supabase JS works in RN).
+Auth flow (Supabase Auth + Google via expo-auth-session or @supabase/supabase-js with expo-secure-store).
+Design tokens: reuse OKLCH → HEX palette above.
+Feature list: search, filters, compare, favorites, sell wizard, dashboard, chat.
+i18n dictionary: reuse en/ar/ku DICT verbatim.
+9.2 What changes for mobile
+Web	Mobile equivalent
+TanStack Router file routes	Expo Router (file-based, same mental model)
+Tailwind CSS	NativeWind (Tailwind for RN) or tamagui
+shadcn/ui + Radix	React Native Paper / gluestack-ui / hand-rolled with Reanimated
+<Sheet> / <Dialog>	@gorhom/bottom-sheet + RN Modal
+lucide-react	lucide-react-native
+framer-motion	react-native-reanimated + moti
+sonner toasts	react-native-toast-message or burnt
+localStorage	expo-secure-store (auth) + @react-native-async-storage/async-storage (favorites)
+Fonts (Sora/Inter)	expo-font + @expo-google-fonts/sora / inter
+dir="rtl"	I18nManager.forceRTL(true) + app reload
+Image <img>	expo-image (with blurhash placeholders)
+Router <Link>	expo-router <Link> / router.push
+9.3 Mobile-specific additions
+Navigation: bottom tab bar (Home / Search / Sell(FAB) / Watchlist / Account) + native stack for detail screens.
+Touch: 44pt hit targets, swipe-to-delete on favorites, pull-to-refresh on lists, haptics via expo-haptics on favorite toggle.
+Camera: expo-image-picker / expo-camera for sell wizard photo uploads; VIN scan using expo-camera + google-mlkit barcode module.
+Push notifications: expo-notifications + Supabase edge trigger sending FCM/APNs — replaces the web notification bell.
+Location: expo-location to auto-fill nearest city and add "Cars near me" filter (add lat/lng to cars).
+Offline: cache last search results with React Query persist + AsyncStorage; queue favorite toggles when offline.
+Deep links (iqcars://car/:id) via Expo Router; universal links for shared listings.
+Biometric unlock for the app via expo-local-authentication.
+9.4 Suggested project structure (RN)
+app/
+  (tabs)/
+    index.tsx            # Home
+    search.tsx
+    sell.tsx
+    favorites.tsx
+    account.tsx
+  car/[id].tsx
+  compare.tsx
+  auth.tsx
+  dashboard.tsx
+components/CarCard.tsx …
+lib/{supabase,auth,i18n,favorites}.ts
+integrations/lovable.ts
+assets/
+10. Final Replit AI Prompt (copy-paste)
+You are a Senior React Native Engineer. Rebuild the "iQ Cars" web app
+(TanStack Start + Supabase) as a production-ready cross-platform mobile
+app using React Native with Expo (SDK latest) and Expo Router (file-based
+routing). Do NOT change business logic, data model, or visual identity.
+
+PRODUCT
+- Name: iQ Cars — Iraq & Kurdistan's largest car marketplace.
+- Trilingual: English, Arabic, Kurdish (with RTL for AR/KU).
+- Users: buyers, private sellers, dealers (with subscription tiers),
+  moderators, admins.
+
+TECH REQUIREMENTS
+- React Native + Expo (managed workflow), TypeScript strict.
+- Expo Router with bottom tab navigator (Home / Search / Sell / Watchlist
+  / Account) + native stack for detail screens.
+- NativeWind (Tailwind) for styling; port the OKLCH → HEX design tokens
+  (light + dark) provided below into `tailwind.config.js`.
+- React Query (@tanstack/react-query) for server state; AsyncStorage
+  persister for offline cache.
+- Forms: react-hook-form + zod.
+- Icons: lucide-react-native. Animations: reanimated + moti.
+- Toasts: burnt (or react-native-toast-message).
+- Fonts: Sora (display) + Inter (body) via @expo-google-fonts.
+- Supabase JS client with expo-secure-store for session persistence.
+- Auth: email/password + Google OAuth via expo-auth-session (same
+  redirect_uri pattern as web).
+- Camera / image picker: expo-image-picker + expo-camera; VIN barcode
+  scanning via expo-camera.
+- Push notifications: expo-notifications wired to notifications table.
+- Location: expo-location for "near me" search.
+- Haptics on key actions (favorite, submit).
+- Deep links: iqcars://car/:id and universal links.
+
+BACKEND (Supabase — already provisioned)
+Reuse the existing schema (do not migrate). Tables:
+profiles, user_roles, brands, car_models, categories, cities, cars,
+car_images, car_videos, car_price_history, dealers, dealer_reviews,
+subscriptions, favorites, saved_searches, conversations, messages,
+notifications, reports, audit_logs.
+Enums: app_role, fuel_type, listing_status, notification_kind,
+report_status, seller_type, subscription_status, subscription_tier,
+transmission_type.
+RLS: users manage only their own rows; public reads only for
+status='active' cars, brands, models, categories, cities, dealers,
+reviews, price history. Use `has_role(auth.uid(), 'admin')` for admin
+checks (never store role on profiles).
+
+SCREENS TO BUILD (feature parity with web)
+1. Home — hero image + advanced search + popular cars + categories +
+   popular brands + sell CTA.
+2. Search — filter drawer (brand, model, year range, price range,
+   mileage range, fuel, transmission, city, seller type) + sort
+   (newest / price asc / price desc) + results grid.
+3. Car Detail — image carousel, title, price (USD+IQD), key specs
+   grid, description, features chips, seller card (Call, WhatsApp,
+   Message), similar cars.
+4. Compare — up to 3 cars side-by-side, diff highlight.
+5. Sell Wizard — 6 steps (basics, specs, media w/ camera, price,
+   contact, review) → inserts car with status='pending' + uploads to
+   Supabase Storage bucket `car-images`.
+6. Auth — sign in / sign up tabs + Google button.
+7. Dashboard — my listings, favorites, messages, saved searches.
+8. Watchlist / Favorites — grid of saved cars.
+9. Editorial — Guide / News / Videos list + detail.
+10. Chat — conversation list + realtime message thread.
+11. Notifications — bell/list, mark read.
+12. Settings — language, theme, logout.
+
+DESIGN SYSTEM
+Light theme colors (HEX): background #FBFBFD, foreground #1B1D2E,
+card #FFFFFF, primary #3A3AA8, primary-glow #5A6BEA, accent #F0803B,
+destructive #E63A2F, success #3DBB7A, warning #E8B646, border #E4E6EC,
+muted-fg #767B8C.
+Dark theme: background #141826, card #1E2233, primary #7A8CF0,
+primary-glow #9AA9F5, foreground #F3F4F8.
+Gradients: hero = indigo→violet→orange 135°; primary = primary→primary-
+glow. Radius base 12px; cards rounded-2xl with soft shadow. Fonts: Sora
+600/700 for headings, Inter 400/500/600 body.
+
+I18N
+Ship EN/AR/KU dictionaries (same keys as the web app: home, guide,
+news, sellCar, advancedSearch, compare, videos, heroTitle, heroSub,
+search, brand, model, yearFrom, yearTo, priceFrom, priceTo, mileageFrom,
+mileageTo, fuel, color, city, allBrands, allModels, any, popularCars,
+viewAll, categories, popularBrands, carsAvailable, dealer, private,
+contact, call, whatsapp, watchlist, specs, features, similar, price,
+year, mileage, engine, transmission, horsepower, filters, results, sort,
+newest, priceLow, priceHigh). For AR/KU call I18nManager.forceRTL(true)
+and prompt reload.
+
+DELIVERABLES
+- Fully working Expo app runnable via `npx expo start`.
+- EAS build profiles for iOS + Android.
+- Env vars: EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.
+- README with setup, env, run, and build instructions.
+- Production quality: TypeScript strict, zero runtime warnings, error
+  boundaries, empty/loading/error states on every screen, offline-safe
+  favorites, secure token storage, form validation, accessibility labels,
+  haptics, dark mode.
+
+Start by scaffolding the Expo Router structure, design tokens, Supabase
+client, auth context, and i18n provider — then build screens in the
+order listed above.

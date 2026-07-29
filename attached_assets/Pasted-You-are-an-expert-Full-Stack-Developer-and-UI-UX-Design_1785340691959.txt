@@ -1,0 +1,367 @@
+You are an expert Full-Stack Developer and UI/UX Designer working in Lovable.
+
+
+
+PROJECT: Build a complete, production-ready automotive marketplace platform called "iQ Cars" from scratch.
+
+
+
+This is the largest online car marketplace in Iraq and Kurdistan, connecting buyers with car dealers (1,000+ showrooms) and private sellers. The platform should feature AI-powered tools, modern design, and comprehensive functionality.
+
+
+
+CORE REQUIREMENTS:
+
+
+
+1. TECH STACK:
+
+- Frontend: Next.js 14+ with App Router
+
+- Styling: Tailwind CSS + Shadcn UI components
+
+- Icons: Lucide React
+
+- Animations: Framer Motion
+
+- State Management: Zustand or React Context
+
+- Responsive: Mobile-first design
+
+- Languages: English, Arabic, Kurdish (with RTL support)
+
+
+
+2. MAIN NAVIGATION:
+
+- Home
+
+- Guide (Insights & Tips)
+
+- News
+
+- Sell Car
+
+- Advanced Search
+
+- Compare
+
+- Videos
+
+- Language Switcher (EN/AR/KU)
+
+
+
+3. HOME PAGE:
+
+- Hero section with advanced search bar:
+
+  * Brand & Model dropdowns
+
+  * Year range (min-max)
+
+  * Mileage range (min-max)
+
+  * Price range (min-max)
+
+  * Fuel type
+
+  * Color
+
+  * City/Location
+
+  * Live counter showing total cars (e.g., "53,970 Cars Available")
+
+- Popular Cars grid with cards showing:
+
+  * Car image
+
+  * Brand/Model
+
+  * Year
+
+  * Mileage
+
+  * Location
+
+  * Price (USD/IQD)
+
+  * Seller type badge (Private/Dealer)
+
+- Categories section with icons:
+
+  * Family Cars
+
+  * Muscle Cars
+
+  * Pickup Trucks
+
+   Personal Cars   VAN
+
+  * US Cars
+
+  * GCC Cars
+
+  * EV (Electric) Cars
+
+- Popular Brands section with expandable lists:
+
+  * Toyota (Hilux, Corolla, Land Cruiser, Camry, Crown, RAV4, Prado)
+
+  * Mercedes-Benz (E-Class, C-Class, S-Class, G-Class, CLS, CLA, GLE, GLS, GLC, AMG GT)
+
+  * Kia (Sorento, Sportage, K4, K5, K3, Cerato, Forte, Sonet)
+
+  * BYD (Qin Plus, SEAL EV, ATTO 3, HAN, SONG PLUS, Shark 6)
+
+  * HAVAL (H6, H6 GT, H7, H9, JOLION, Dargo)
+
+  * Chevrolet (Tahoe, Camaro, Malibu, Silverado, Corvette, Impala)
+
+  * GAC, Soueast, OMODA, JAECOO, Jetour, TANK
+
+
+
+4. ADVANCED SEARCH PAGE:
+
+- AI-powered smart filters sidebar
+
+- Save search criteria functionality
+
+- Real-time results with pagination
+
+- Sort options (Price, Year, Mileage, Newest)
+
+- Grid/List view toggle
+
+
+
+5. CAR DETAILS PAGE:
+
+- Image gallery with zoom and lightbox
+
+- Full specifications table
+
+- Features & options list
+
+- Seller information card
+
+- Contact buttons (Call, WhatsApp, Chat)
+
+- Similar cars recommendations
+
+- Report car button
+
+- Add to watchlist button
+
+
+
+6. COMPARE PAGE:
+
+- Side-by-side comparison tool for 2-4 cars
+
+- Comparison rows:
+
+  * Price
+
+  * Year
+
+  * Mileage
+
+  * Engine specs
+
+  * Transmission
+
+  * Fuel type
+
+  * Features
+
+  * Fuel consumption
+
+  * Performance metrics
+
+
+
+7. SELL CAR FLOW (Multi-step wizard):
+
+- Step 1: Upload images (drag-and-drop, unlimited, sortable, AI enhancement placeholder)
+
+- Step 2: Smart input (VIN/License scan UI to auto-fill data)
+
+- Step 3: Basic info (Brand, Model, Year, Color, Mileage, Price)
+
+- Step 4: Technical specs (Engine, Transmission, Fuel, Horsepower)
+
+- Step 5: Features & options (AC, Navigation, Camera, Sensors, Sunroof, Leather, etc.)
+
+- Step 6: Contact info (Phone, City, Showroom name if applicable)- Preview & Submit
+
+
+
+8. DEALER/SHOWROOM DASHBOARD:
+
+- Analytics overview (Views, Clicks, Leads, Conversion rate)
+
+- Active listings management
+
+- Auto-generated showroom profile page
+
+- "Verified Badge" toggle
+
+- Spec card generator for social media
+
+- QR code generator for showroom
+
+- Multi-user management (add employees with roles)
+
+- Support chat integration
+
+
+
+9. USER DASHBOARD:
+
+- Watchlist (Saved cars)
+
+- Saved searches with notification toggles
+
+- Secret offers section
+
+- Price estimator tool
+
+- Car history reports viewer
+
+- My listings (for sellers)
+
+- Messages/Chat
+
+
+
+10. CONTENT PAGES:
+
+- Guide/Insights:
+
+  * Blog-style articles
+
+  * Tips for buying used cars safely
+
+  * Maintenance guides
+
+  * Brand information
+
+  * Buying/selling advice
+
+- News:
+
+  * Latest auto news in Iraq
+
+  * New model launches
+
+  * Dealer offers & promotions
+
+  * Platform updates
+
+- Videos:
+
+  * Video grid with thumbnails
+
+  * Car introductions
+
+  * 360° virtual tours
+
+  * Test drives
+
+  * Educational content
+
+
+
+11. AI FEATURES (UI Placeholders):
+
+- AI image enhancement
+
+- Auto-fill from VIN/License scan
+
+- Smart price estimation
+
+- AI-powered search suggestions
+
+- Buyer-dealer matching
+
+
+
+12. DESIGN REQUIREMENTS:
+
+- Modern, sleek automotive theme
+
+- Color scheme: Professional blues/grays with accent colors- Clean typography
+
+- Smooth animations and transitions
+
+- Loading states and skeletons
+
+- Toast notifications
+
+- Modal dialogs for actions
+
+- Fully responsive (mobile, tablet, desktop)
+
+
+
+13. DATA STRUCTURE (Mock Data):
+
+- Realistic car names and models
+
+- Prices in USD and IQD
+
+- Iraqi cities (Baghdad, Erbil, Basra, Sulaymaniyah, Duhok, Kirkuk, Mosul, Najaf, Karbala)
+
+- Realistic mileage and years
+
+- Dealer and private seller profiles
+
+
+
+14. ADDITIONAL FEATURES:
+
+- Dark/Light mode toggle
+
+- SEO optimization
+
+- Performance optimization (lazy loading, image optimization)
+
+- Accessibility (ARIA labels, keyboard navigation)
+
+- Error handling and validation
+
+
+
+EXECUTION PLAN:
+
+1. Set up project structure and routing
+
+2. Create shared components (Header, Footer, Cards, Buttons)
+
+3. Build Home page with all sections
+
+4. Implement Advanced Search with filters
+
+5. Create Car Details page
+
+6. Build Compare functionality
+
+7. Develop Sell Car wizard
+
+8. Create Dealer Dashboard
+
+9. Build User Dashboard
+
+10. Add Content pages (Guide, News, Videos)
+
+11. Implement language switching and RTL
+
+12. Add animations and polish UI
+
+13. Populate with realistic mock data
+
+
+
+Start building now. Create a complete, functional, and visually stunning iQ Cars platform that rivals the real one.
