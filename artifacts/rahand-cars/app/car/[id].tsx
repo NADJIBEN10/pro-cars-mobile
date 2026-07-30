@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CarCard } from '@/components/CarCard';
 import { SpecsGrid, type SpecItem } from '@/components/SpecsGrid';
 import { FeaturesList } from '@/components/FeaturesList';
+import { ContactButtons } from '@/components/ContactButtons';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { useI18n } from '@/lib/i18n';
 
@@ -108,14 +109,26 @@ export default function CarDetailScreen() {
               {car.city}
             </Text>
           </View>
-          <View style={styles.contactBtns}>
-            <View style={[styles.contactBtn, { backgroundColor: colors.success + '20' }]}>
-              <Feather name="phone" size={18} color={colors.success} />
-            </View>
-            <View style={[styles.contactBtn, { backgroundColor: '#25D366' + '20' }]}>
-              <Feather name="message-circle" size={18} color="#25D366" />
-            </View>
-          </View>
+          <ContactButtons
+            buttons={[
+              {
+                icon: 'phone',
+                label: t.call,
+                color: colors.success,
+                onPress: () => {
+                  /* TODO: Link.to tel: */
+                },
+              },
+              {
+                icon: 'message-circle',
+                label: t.whatsapp,
+                color: '#25D366',
+                onPress: () => {
+                  /* TODO: Link.to WhatsApp */
+                },
+              },
+            ]}
+          />
         </View>
 
         {/* Similar cars */}
@@ -212,16 +225,5 @@ const styles = StyleSheet.create({
   sellerCity: {
     fontSize: fontSize.sm,
     marginTop: spacing.xs - 2,
-  },
-  contactBtns: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  contactBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
