@@ -3,19 +3,33 @@ import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { spacing } from '@/constants/spacing';
-import { fonts, fontSize } from '@/constants/typography';
+import { fonts, fontSize, lineHeight } from '@/constants/typography';
 import { useColors } from '@/hooks/useColors';
 import { CARS, formatMileage, formatPriceUSD, getFuelLabel } from '@/lib/mock-data';
 import { Badge } from '@/components/ui/Badge';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CarCard } from '@/components/CarCard';
+import { SpecsGrid, type SpecItem } from '@/components/SpecsGrid';
+import { FeaturesList } from '@/components/FeaturesList';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { useI18n } from '@/lib/i18n';
 
 export default function CarDetailScreen() {
   const colors = useColors();
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const car = CARS.find((c) => c.id === id) ?? CARS[0];
 
   const similar = CARS.filter((c) => c.id !== car.id && c.category === car.category).slice(0, 3);
+
+  const specs: SpecItem[] = [
+    { icon: 'calendar', label: 'Year', value: String(car.year) },
+    { icon: 'activity', label: 'Mileage', value: formatMileage(car.mileageKm) },
+    { icon: 'zap', label: 'Fuel', value: getFuelLabel(car.fuelType) },
+    { icon: 'settings', label: 'Trans.', value: car.transmission === 'automatic' ? 'Auto' : 'Manual' },
+    { icon: 'cpu', label: 'Engine', value: car.engineCc > 0 ? `${(car.engineCc / 1000).toFixed(1)}L` : 'Electric' },
+    { icon: 'trending-up', label: 'HP', value: `${car.horsepower} hp` },
+  ];
 
   return (
     <ScrollView
@@ -29,7 +43,7 @@ export default function CarDetailScreen() {
       >
         <View style={styles.heroIcon}>
           <Feather name="camera" size={40} color={colors.primary + '80'} />
-          <Text style={[styles.heroBrand, { color: colors.primary + '80', fontFamily: fonts.displayMedium }]}>
+          <Text style={[styles.heroBrand, { color: colors.primary + '80', fontFamily: fonts.bodyMedium }]}>
             {car.brand}
           </Text>
         </View>
@@ -59,53 +73,25 @@ export default function CarDetailScreen() {
         </View>
 
         {/* Key specs grid */}
-        <View style={[styles.specsGrid, { borderColor: colors.border, borderRadius: colors.radius }]}>
-          {[
-            { icon: 'calendar', label: 'Year', value: String(car.year) },
-            { icon: 'activity', label: 'Mileage', value: formatMileage(car.mileageKm) },
-            { icon: 'zap', label: 'Fuel', value: getFuelLabel(car.fuelType) },
-            { icon: 'settings', label: 'Trans.', value: car.transmission === 'automatic' ? 'Auto' : 'Manual' },
-            { icon: 'cpu', label: 'Engine', value: car.engineCc > 0 ? `${(car.engineCc / 1000).toFixed(1)}L` : 'Electric' },
-            { icon: 'trending-up', label: 'HP', value: `${car.horsepower} hp` },
-          ].map((spec, i) => (
-            <View
-              key={i}
-              style={[
-                styles.specCell,
-                {
-                  borderColor: colors.border,
-                  borderRightWidth: (i + 1) % 3 === 0 ? 0 : 1,
-                  borderBottomWidth: i < 3 ? 1 : 0,
-                },
-              ]}
-            >
-              <Feather name={spec.icon as any} size={16} color={colors.primary} />
-              <Text style={[styles.specLabel, { color: colors.mutedForeground, fontFamily: fonts.bodyRegular }]}>
-                {spec.label}
-              </Text>
-              <Text style={[styles.specValue, { color: colors.foreground, fontFamily: fonts.bodySemiBold }]}>
-                {spec.value}
-              </Text>
-            </View>
-          ))}
-        </View>
+        <SpecsGrid specs={specs} />
+
+        {/* Description */}
+        {car.description && (
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.foreground, fontFamily: fonts.displayMedium }]}>
+              Description
+            </Text>
+            <Text style={[styles.descriptionText, { color: colors.mutedForeground, fontFamily: fonts.bodyRegular }]}>
+              {car.description}
+            </Text>
+          </View>
+        )}
 
         {/* Features */}
         {car.features.length > 0 && (
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.foreground, fontFamily: fonts.displayMedium }]}>
-              Features
-            </Text>
-            <View style={styles.featuresWrap}>
-              {car.features.map((f) => (
-                <View key={f} style={[styles.featureChip, { backgroundColor: colors.secondary, borderRadius: 20 }]}>
-                  <Feather name="check" size={12} color={colors.success} />
-                  <Text style={[styles.featureText, { color: colors.foreground, fontFamily: fonts.bodyRegular }]}>
-                    {f}
-                  </Text>
-                </View>
-              ))}
-            </View>
+            <SectionHeader title={t.features} />
+            <FeaturesList features={car.features} />
           </View>
         )}
 
@@ -146,7 +132,7 @@ export default function CarDetailScreen() {
           </View>
         )}
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: spacing['3xl'] }} />
       </View>
     </ScrollView>
   );
@@ -160,7 +146,7 @@ const styles = StyleSheet.create({
   },
   heroIcon: {
     alignItems: 'center',
-    gap: 8,
+    gap: spacing.sm,
   },
   heroBrand: {
     fontSize: fontSize.xl,
@@ -172,17 +158,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: 12,
+    gap: spacing.sm + 4,
     marginBottom: spacing.lg,
   },
   title: {
     fontSize: fontSize['2xl'],
-    marginBottom: 8,
-    lineHeight: fontSize['2xl'] * 1.2,
+    marginBottom: spacing.sm,
+    lineHeight: fontSize['2xl'] * lineHeight.tight,
   },
   badgeRow: {
     flexDirection: 'row',
-    gap: 6,
+    gap: spacing.xs + 2,
     flexWrap: 'wrap',
   },
   price: {
@@ -192,27 +178,7 @@ const styles = StyleSheet.create({
   priceIqd: {
     fontSize: fontSize.xs,
     textAlign: 'right',
-    marginTop: 2,
-  },
-  specsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    borderWidth: 1,
-    overflow: 'hidden',
-    marginBottom: spacing['2xl'],
-  },
-  specCell: {
-    width: '33.33%',
-    padding: 14,
-    alignItems: 'center',
-    gap: 4,
-  },
-  specLabel: {
-    fontSize: fontSize.xs,
-    marginTop: 2,
-  },
-  specValue: {
-    fontSize: fontSize.sm,
+    marginTop: spacing.xs - 2,
   },
   section: {
     marginBottom: spacing['2xl'],
@@ -221,25 +187,14 @@ const styles = StyleSheet.create({
     fontSize: fontSize.xl,
     marginBottom: spacing.md,
   },
-  featuresWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  featureChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  featureText: {
-    fontSize: fontSize.sm,
+  descriptionText: {
+    fontSize: fontSize.base,
+    lineHeight: fontSize.base * lineHeight.relaxed,
   },
   sellerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.sm + 4,
     padding: spacing.base,
     borderWidth: 1,
     marginBottom: spacing['2xl'],
@@ -256,11 +211,11 @@ const styles = StyleSheet.create({
   },
   sellerCity: {
     fontSize: fontSize.sm,
-    marginTop: 2,
+    marginTop: spacing.xs - 2,
   },
   contactBtns: {
     flexDirection: 'row',
-    gap: 8,
+    gap: spacing.sm,
   },
   contactBtn: {
     width: 40,

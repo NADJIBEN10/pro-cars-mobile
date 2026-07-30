@@ -73,6 +73,8 @@ export default function AccountScreen() {
           icon: 'moon',
           label: t.darkMode,
           desc: 'Theme preference',
+          // TODO: Navigate to a dedicated Appearance screen in a future sprint.
+          // For now, dark mode follows the system color scheme via useColorScheme().
           onPress: () => router.push('/settings'),
         },
         {
