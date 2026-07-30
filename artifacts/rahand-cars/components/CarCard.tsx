@@ -3,7 +3,7 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { spacing } from '@/constants/spacing';
 import { fonts, fontSize } from '@/constants/typography';
@@ -23,13 +23,15 @@ export function CarCard({ car, horizontal = false }: CarCardProps) {
   const { isFavorite, toggle } = useFavorites();
   const liked = isFavorite(car.id);
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     router.push(`/car/${car.id}`);
-  };
+  }, [car.id]);
 
-  const handleFavorite = (e: { stopPropagation?: () => void }) => {
+  const handleFavorite = useCallback((e: { stopPropagation?: () => void }) => {
+    e.stopPropagation?.();
     toggle(car.id);
-  };
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  }, [car.id, toggle]);
 
   if (horizontal) {
     return (
@@ -120,7 +122,7 @@ export function CarCard({ car, horizontal = false }: CarCardProps) {
         {!car.coverImage && (
           <View style={styles.placeholderIcon}>
             <Feather name="camera" size={28} color={colors.primary + '80'} />
-            <Text style={[styles.placeholderBrand, { color: colors.primary + '80', fontFamily: fonts.displayMedium }]}>
+            <Text style={[styles.placeholderBrand, { color: colors.primary + '80', fontFamily: fonts.bodyMedium }]}>
               {car.brand}
             </Text>
           </View>
@@ -134,8 +136,10 @@ export function CarCard({ car, horizontal = false }: CarCardProps) {
           />
           <Pressable
             onPress={handleFavorite}
-            hitSlop={12}
+            hitSlop={10}
             style={[styles.heartBtn, { backgroundColor: colors.card + 'CC' }]}
+            accessibilityLabel={liked ? 'Remove from favorites' : 'Add to favorites'}
+            accessibilityRole="button"
           >
             <Feather
               name="heart"
@@ -164,14 +168,14 @@ export function CarCard({ car, horizontal = false }: CarCardProps) {
               {' '}{car.year}
             </Text>
           </View>
-          <View style={styles.specDot} />
+          <View style={[styles.specDot, { backgroundColor: colors.border }]} />
           <View style={styles.spec}>
             <Feather name="activity" size={11} color={colors.mutedForeground} />
             <Text style={[styles.specText, { color: colors.mutedForeground, fontFamily: fonts.bodyRegular }]}>
               {' '}{formatMileage(car.mileageKm)}
             </Text>
           </View>
-          <View style={styles.specDot} />
+          <View style={[styles.specDot, { backgroundColor: colors.border }]} />
           <View style={styles.spec}>
             <Feather name="map-pin" size={11} color={colors.mutedForeground} />
             <Text style={[styles.specText, { color: colors.mutedForeground, fontFamily: fonts.bodyRegular }]}>
@@ -209,21 +213,21 @@ const styles = StyleSheet.create({
     height: 180,
     overflow: 'hidden',
     position: 'relative',
-    margin: 10,
+    margin: spacing.sm + 2,
   },
   imageOverlay: {
     position: 'absolute',
-    top: 8,
-    left: 8,
-    right: 8,
+    top: spacing.sm,
+    left: spacing.sm,
+    right: spacing.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   heartBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -231,15 +235,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    gap: spacing.xs,
   },
   placeholderBrand: {
     fontSize: fontSize.sm,
   },
   body: {
-    padding: 12,
-    paddingTop: 4,
-    gap: 6,
+    padding: spacing.sm + 4,
+    paddingTop: spacing.xs,
+    gap: spacing.xs + 2,
   },
   cardTitle: {
     fontSize: fontSize.md,
@@ -247,7 +251,7 @@ const styles = StyleSheet.create({
   specRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: spacing.xs,
     flexWrap: 'wrap',
   },
   spec: {
@@ -261,13 +265,12 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#ccc',
   },
   priceRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: spacing.xs - 2,
   },
   cardPrice: {
     fontSize: fontSize.lg,
@@ -275,8 +278,8 @@ const styles = StyleSheet.create({
   verifiedChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 6,
-    paddingVertical: 3,
+    paddingHorizontal: spacing.xs + 2,
+    paddingVertical: spacing.xs - 1,
     borderRadius: 20,
   },
   verifiedText: {
@@ -303,7 +306,7 @@ const styles = StyleSheet.create({
   },
   hInfo: {
     flex: 1,
-    gap: 4,
+    gap: spacing.xs,
   },
   title: {
     fontSize: fontSize.base,

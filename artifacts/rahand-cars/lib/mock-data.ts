@@ -35,6 +35,7 @@ export interface MockCategory {
   slug: string;
   label: string;
   icon: string;
+  iconFamily: 'feather' | 'material-community';
 }
 
 // ─── Cities ───────────────────────────────────────────────────────────────────
@@ -75,14 +76,14 @@ export const BRANDS = [
 // ─── Categories ───────────────────────────────────────────────────────────────
 
 export const CATEGORIES: MockCategory[] = [
-  { id: '1', slug: 'suv', label: 'SUV', icon: 'truck' },
-  { id: '2', slug: 'sedan', label: 'Sedan', icon: 'car' },
-  { id: '3', slug: 'pickup', label: 'Pickup', icon: 'truck' },
-  { id: '4', slug: 'coupe', label: 'Coupe', icon: 'zap' },
-  { id: '5', slug: 'van', label: 'Van', icon: 'box' },
-  { id: '6', slug: 'electric', label: 'Electric', icon: 'battery-charging' },
-  { id: '7', slug: 'luxury', label: 'Luxury', icon: 'star' },
-  { id: '8', slug: 'muscle', label: 'Muscle', icon: 'activity' },
+  { id: '1', slug: 'suv', label: 'SUV', icon: 'car-estate', iconFamily: 'material-community' },
+  { id: '2', slug: 'sedan', label: 'Sedan', icon: 'car-side', iconFamily: 'material-community' },
+  { id: '3', slug: 'pickup', label: 'Pickup', icon: 'car-pickup', iconFamily: 'material-community' },
+  { id: '4', slug: 'coupe', label: 'Coupe', icon: 'car-sports', iconFamily: 'material-community' },
+  { id: '5', slug: 'van', label: 'Van', icon: 'van-passenger', iconFamily: 'material-community' },
+  { id: '6', slug: 'electric', label: 'Electric', icon: 'lightning-bolt', iconFamily: 'material-community' },
+  { id: '7', slug: 'luxury', label: 'Luxury', icon: 'crown', iconFamily: 'material-community' },
+  { id: '8', slug: 'muscle', label: 'Muscle', icon: 'engine', iconFamily: 'material-community' },
 ];
 
 // ─── Cars ─────────────────────────────────────────────────────────────────────

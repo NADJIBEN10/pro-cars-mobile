@@ -1,4 +1,4 @@
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { spacing } from '@/constants/spacing';
-import { fonts, fontSize } from '@/constants/typography';
+import { fonts, fontSize, lineHeight } from '@/constants/typography';
 import { useColors } from '@/hooks/useColors';
 import { SearchBar } from '@/components/SearchBar';
 import { CarCard } from '@/components/CarCard';
@@ -111,7 +111,11 @@ export default function HomeScreen() {
               ]}
               onPress={() => router.push('/(tabs)/search')}
             >
-              <Feather name={cat.icon as any} size={16} color={colors.primary} />
+              {cat.iconFamily === 'material-community' ? (
+                <MaterialCommunityIcons name={cat.icon as any} size={16} color={colors.primary} />
+              ) : (
+                <Feather name={cat.icon as any} size={16} color={colors.primary} />
+              )}
               <Text style={[styles.categoryLabel, { color: colors.foreground, fontFamily: fonts.bodyMedium }]}>
                 {cat.label}
               </Text>
@@ -186,22 +190,22 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.6)',
     letterSpacing: 2,
     textTransform: 'uppercase',
-    marginBottom: 12,
+    marginBottom: spacing.sm + 4,
   },
   heroTitle: {
     fontSize: fontSize['4xl'],
     color: '#FFFFFF',
-    lineHeight: fontSize['4xl'] * 1.2,
+    lineHeight: fontSize['4xl'] * lineHeight.tight,
   },
   heroSub: {
     fontSize: fontSize.base,
     color: 'rgba(255,255,255,0.7)',
-    marginTop: 6,
-    lineHeight: fontSize.base * 1.5,
+    marginTop: spacing.xs + 2,
+    lineHeight: fontSize.base * lineHeight.relaxed,
   },
   counterRow: {
-    marginTop: 16,
-    marginBottom: 20,
+    marginTop: spacing.base,
+    marginBottom: spacing.lg,
   },
   counterChip: {
     flexDirection: 'row',
@@ -220,19 +224,20 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
   },
   searchBar: {
-    marginBottom: 14,
+    marginBottom: spacing.md + 2,
   },
   quickActions: {
     flexDirection: 'row',
-    gap: 10,
+    gap: spacing.sm,
   },
   quickBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    gap: spacing.xs + 2,
+    paddingHorizontal: spacing.base,
+    paddingVertical: spacing.sm + 1,
     borderRadius: 20,
+    minHeight: 36,
   },
   quickBtnText: {
     fontSize: fontSize.sm,
@@ -252,6 +257,9 @@ const styles = StyleSheet.create({
   },
   viewAll: {
     fontSize: fontSize.sm,
+    minHeight: 36,
+    textAlignVertical: 'center',
+    paddingHorizontal: spacing.xs,
   },
   categoryScroll: {
     marginHorizontal: -spacing.pagePadding,
@@ -260,11 +268,12 @@ const styles = StyleSheet.create({
   categoryChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    gap: spacing.xs + 2,
+    paddingHorizontal: spacing.base,
+    paddingVertical: spacing.sm + 1,
     borderWidth: 1,
-    marginRight: 8,
+    marginRight: spacing.sm,
+    minHeight: 36,
   },
   categoryLabel: {
     fontSize: fontSize.sm,
@@ -280,7 +289,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 16,
+    gap: spacing.base,
   },
   ctaTitle: {
     fontSize: fontSize.xl,
@@ -289,14 +298,15 @@ const styles = StyleSheet.create({
   ctaSub: {
     fontSize: fontSize.sm,
     color: 'rgba(255,255,255,0.8)',
-    marginTop: 4,
+    marginTop: spacing.xs,
   },
   ctaBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    gap: spacing.xs + 2,
+    paddingHorizontal: spacing.base,
+    paddingVertical: spacing.sm + 2,
+    minHeight: 40,
   },
   ctaBtnText: {
     color: 'white',
