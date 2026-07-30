@@ -1,12 +1,16 @@
-import { Feather } from '@expo/vector-icons';
-import React from 'react';
+import React, { type ComponentProps } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+import { Feather } from '@expo/vector-icons';
+
 import { spacing } from '@/constants/spacing';
 import { fonts, fontSize } from '@/constants/typography';
 import { useColors } from '@/hooks/useColors';
 
+type FeatherIconName = ComponentProps<typeof Feather>['name'];
+
 export interface SpecItem {
-  icon: string;
+  icon: FeatherIconName;
   label: string;
   value: string;
 }
@@ -22,7 +26,7 @@ export function SpecsGrid({ specs }: SpecsGridProps) {
     <View style={[styles.specsGrid, { borderColor: colors.border, borderRadius: colors.radius }]}>
       {specs.map((spec, i) => (
         <View
-          key={i}
+          key={spec.label}
           style={[
             styles.specCell,
             {
@@ -33,7 +37,7 @@ export function SpecsGrid({ specs }: SpecsGridProps) {
           ]}
           accessibilityLabel={`${spec.label}: ${spec.value}`}
         >
-          <Feather name={spec.icon as any} size={16} color={colors.primary} />
+          <Feather name={spec.icon} size={16} color={colors.primary} />
           <Text style={[styles.specLabel, { color: colors.mutedForeground, fontFamily: fonts.bodyRegular }]}>
             {spec.label}
           </Text>

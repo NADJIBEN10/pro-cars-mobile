@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { type ComponentProps } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { spacing } from '@/constants/spacing';
-import { useColors } from '@/hooks/useColors';
+
+type FeatherIconName = ComponentProps<typeof Feather>['name'];
+type MaterialCommunityIconsIconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 interface ContactButton {
-  icon: string;
+  id: string;
+  icon: FeatherIconName | MaterialCommunityIconsIconName;
   iconFamily?: 'feather' | 'material-community';
   label: string;
   color: string;
@@ -20,8 +23,6 @@ interface ContactButtonsProps {
 }
 
 export function ContactButtons({ buttons }: ContactButtonsProps) {
-  const colors = useColors();
-
   if (buttons.length === 0) return null;
 
   return (
@@ -30,7 +31,7 @@ export function ContactButtons({ buttons }: ContactButtonsProps) {
         const bgColor = button.backgroundColor ?? `${button.color}20`;
         return (
           <Pressable
-            key={button.label}
+            key={button.id}
             onPress={button.onPress}
             hitSlop={spacing.sm}
             accessibilityLabel={button.label}
@@ -42,14 +43,14 @@ export function ContactButtons({ buttons }: ContactButtonsProps) {
           >
             {button.iconFamily === 'material-community' ? (
               <MaterialCommunityIcons
-                name={button.icon as any}
+                name={button.icon as MaterialCommunityIconsIconName}
                 size={18}
                 color={button.color}
                 accessibilityElementsHidden
               />
             ) : (
               <Feather
-                name={button.icon as any}
+                name={button.icon as FeatherIconName}
                 size={18}
                 color={button.color}
                 accessibilityElementsHidden
