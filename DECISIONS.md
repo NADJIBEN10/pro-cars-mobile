@@ -242,3 +242,22 @@ If a feature cannot be implemented immediately, a placeholder will be created un
 # Future Decisions
 
 Additional architecture and business decisions will be documented here as the project evolves.
+
+
+
+# Decision 010
+
+## UI Review Policy
+
+Status
+
+Approved
+
+Reason
+
+A development phase cannot be marked as complete until both:
+
+- Technical review
+- UI/UX review
+
+have been completed successfully.
