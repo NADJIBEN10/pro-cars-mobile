@@ -1,7 +1,7 @@
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   Platform,
   Pressable,
@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { spacing } from '@/constants/spacing';
@@ -27,12 +26,7 @@ export default function HomeScreen() {
   const { t } = useI18n();
   const [query, setQuery] = React.useState('');
 
-  const { width: screenWidth } = useWindowDimensions();
-  const isWide = screenWidth >= 600;
   const topInset = Platform.OS === 'web' ? 67 : insets.top;
-
-  const handleSearchPress = useCallback(() => router.push('/(tabs)/search'), []);
-  const handleSellPress = useCallback(() => router.push('/(tabs)/sell'), []);
 
   return (
     <ScrollView
