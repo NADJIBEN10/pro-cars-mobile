@@ -58,6 +58,13 @@ function RootLayoutNav() {
           presentation: 'modal',
         }}
       />
+      <Stack.Screen
+        name="create-listing"
+        options={{
+          title: 'Create Listing',
+          presentation: 'modal',
+        }}
+      />
     </Stack>
   );
 }

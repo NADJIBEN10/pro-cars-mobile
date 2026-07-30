@@ -29,6 +29,7 @@ export interface MockCar {
   features: string[];
   coverImage?: string;
   description?: string;
+  phone?: string;
 }
 
 export interface MockCategory {
@@ -110,6 +111,8 @@ export const CARS: MockCar[] = [
     horsepower: 409,
     features: ['Navigation', 'Leather Seats', 'Sunroof', 'Backup Camera', '4WD', 'Heated Seats'],
     description: 'Excellent condition Toyota Land Cruiser 2022, single owner from new. Full service history at Toyota Baghdad. 4.6L V8 engine with 409 HP, 4WD capability for all terrains. Premium white exterior with black leather interior. All features working perfectly. Serious buyers only, no time wasters.',
+    coverImage: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80',
+    phone: '+9647701000001',
   },
   {
     id: '2',
@@ -131,6 +134,8 @@ export const CARS: MockCar[] = [
     horsepower: 206,
     features: ['Navigation', 'Heated Seats', 'Apple CarPlay', 'Android Auto'],
     description: 'Like-new Toyota Camry Hybrid 2023 with only 12,000 km. Silver exterior with black interior. Hybrid engine delivers excellent fuel economy. Apple CarPlay and Android Auto included. Private seller, well maintained, garage kept in Erbil.',
+    coverImage: 'https://images.unsplash.com/photo-1621007947382-bb3c3968e3bb?w=800&q=80',
+    phone: '+9647701000002',
   },
   {
     id: '3',
@@ -152,6 +157,8 @@ export const CARS: MockCar[] = [
     horsepower: 255,
     features: ['Panoramic Roof', 'Burmester Sound', 'Night Package', 'Ambient Lighting', '360 Camera'],
     description: 'Pristine Mercedes-Benz GLE 350 2022 in black. 2.0L turbocharged engine with 255 HP. Includes panoramic roof, Burmester premium sound system, 360-degree camera, and ambient lighting with 64 colors. Night package adds black exterior trim. Dealer maintained with full service records.',
+    coverImage: 'https://images.unsplash.com/photo-1520031441872-265149a9e690?w=800&q=80',
+    phone: '+9647701000003',
   },
   {
     id: '4',
@@ -173,6 +180,8 @@ export const CARS: MockCar[] = [
     horsepower: 180,
     features: ['Lane Assist', 'Apple CarPlay', 'Android Auto', 'Heated Seats', 'Blind Spot Monitor'],
     description: 'Kia Sportage 2023 in beautiful blue color, only 8,000 km. 1.6L engine with 180 HP. Equipped with lane assist, blind spot monitoring, heated seats, and full smartphone connectivity. Dealer verified with warranty remaining.',
+    coverImage: 'https://images.unsplash.com/photo-1563720223185-1103f516c448?w=800&q=80',
+    phone: '+9647701000004',
   },
   {
     id: '5',
@@ -194,6 +203,8 @@ export const CARS: MockCar[] = [
     horsepower: 313,
     features: ['Fast Charging', 'Autopilot', 'Glass Roof', '500km Range', 'OTA Updates'],
     description: 'Brand new BYD SEAL EV 2024 with only 3,000 km. Fully electric with 313 HP and 500km range on a single charge. Features include fast charging, autopilot, glass roof, and OTA software updates. Red exterior with premium interior. Future of driving available now in Erbil.',
+    coverImage: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&q=80',
+    phone: '+9647701000005',
   },
   {
     id: '6',
@@ -215,6 +226,8 @@ export const CARS: MockCar[] = [
     horsepower: 355,
     features: ['4WD', 'Leather', 'Navigation', 'Heated/Cooled Seats', 'Bose Sound'],
     description: 'Chevrolet Tahoe 2021, powerful 5.3L V8 with 355 HP and 4WD. Black exterior with leather interior. 67,000 km highway miles. Includes heated and cooled seats, Bose premium sound, and navigation. Private seller in Basra, well maintained.',
+    coverImage: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&q=80',
+    phone: '+9647701000006',
   },
   {
     id: '7',
@@ -236,131 +249,148 @@ export const CARS: MockCar[] = [
     horsepower: 243,
     features: ['360 Camera', 'HUD', 'Wireless Charging', 'Premium Sound', 'Panoramic Roof'],
     description: 'HAVAL H6 GT 2023 hybrid SUV in gray. 1.5L engine with 243 HP. Only 15,000 km. Features 360-degree camera, head-up display, wireless charging, panoramic roof, and premium sound system. Excellent value for money, dealer verified in Duhok.',
+    coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
+    phone: '+9647701000007',
   },
   {
     id: '8',
-    title: 'Toyota Hilux 2022',
-    brand: 'Toyota',
-    model: 'Hilux',
-    year: 2022,
-    mileageKm: 52000,
-    priceUsd: 35000,
-    priceIqd: 45850000,
-    fuelType: 'diesel',
-    transmission: 'manual',
-    color: 'White',
-    city: 'Kirkuk',
-    sellerType: 'private',
-    isVerified: false,
-    category: 'Pickup',
-    engineCc: 2755,
-    horsepower: 204,
-    features: ['4WD', 'Differential Lock', 'Tow Package', 'Bull Bar'],
-    description: 'Toyota Hilux 2022 diesel pickup, manual transmission, 2.8L engine with 204 HP. White exterior, 52,000 km. Built for work with 4WD, differential lock, tow package, and bull bar. Tough and reliable, private seller in Kirkuk.',
-  },
-  {
-    id: '9',
-    title: 'BMW X5 xDrive40i 2022',
+    title: 'BMW X5 2022',
     brand: 'BMW',
     model: 'X5',
     year: 2022,
-    mileageKm: 31000,
-    priceUsd: 72000,
-    priceIqd: 94320000,
+    mileageKm: 22000,
+    priceUsd: 78000,
+    priceIqd: 102060000,
     fuelType: 'petrol',
     transmission: 'automatic',
-    color: 'White',
+    color: 'Blue',
     city: 'Baghdad',
     sellerType: 'dealer',
     isVerified: true,
     category: 'SUV',
     engineCc: 2998,
     horsepower: 340,
-    features: ['Panoramic Roof', 'Harman Kardon', 'Night Vision', 'Adaptive Cruise', 'Laser Lights'],
-    description: 'BMW X5 xDrive40i 2022 in white. 3.0L inline-6 with 340 HP and xDrive AWD. 31,000 km. Features panoramic roof, Harman Kardon sound, night vision assist, adaptive cruise control, and laser headlights. Premium luxury SUV, dealer maintained in Baghdad.',
+    features: ['M Sport Package', 'Laser Headlights', 'Executive Lounge', 'Bowers & Wilkins', 'Driving Assistant'],
+    description: 'BMW X5 2022 xDrive40i in stunning blue. 3.0L turbocharged inline-6 with 340 HP. M Sport package, laser headlights, executive lounge seats, and Bowers & Wilkins surround sound. Fully loaded with every option. Dealer maintained, low mileage.',
+    coverImage: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
+    phone: '+9647701000008',
   },
   {
-    id: '10',
+    id: '9',
     title: 'Hyundai Tucson 2023',
     brand: 'Hyundai',
     model: 'Tucson',
     year: 2023,
-    mileageKm: 9500,
-    priceUsd: 24000,
-    priceIqd: 31440000,
+    mileageKm: 10000,
+    priceUsd: 27000,
+    priceIqd: 35340000,
     fuelType: 'petrol',
     transmission: 'automatic',
-    color: 'Green',
-    city: 'Najaf',
-    sellerType: 'dealer',
-    isVerified: true,
-    category: 'SUV',
-    engineCc: 1598,
-    horsepower: 177,
-    features: ['Sunroof', 'BOSE Sound', 'Blind Spot Monitor', 'Lane Keeping', 'Wireless Charging'],
-    description: 'Hyundai Tucson 2023 in green, nearly new with 9,500 km. 1.6L engine with 177 HP. Includes sunroof, BOSE sound system, blind spot monitor, lane keeping assist, and wireless charging. Dealer verified in Najaf, great family SUV.',
-  },
-  {
-    id: '11',
-    title: 'Kia K5 GT-Line 2023',
-    brand: 'Kia',
-    model: 'K5',
-    year: 2023,
-    mileageKm: 6200,
-    priceUsd: 26000,
-    priceIqd: 34060000,
-    fuelType: 'petrol',
-    transmission: 'automatic',
-    color: 'Black',
+    color: 'White',
     city: 'Erbil',
     sellerType: 'dealer',
     isVerified: true,
-    category: 'Sedan',
-    engineCc: 1598,
-    horsepower: 180,
-    features: ['Sport Mode', 'Heated Seats', 'Smart Cruise', 'Head-up Display'],
-    description: 'Kia K5 GT-Line 2023 in black, only 6,200 km. 1.6L engine with 180 HP. Sport mode, heated seats, smart cruise control, and head-up display. Stylish sedan with sporty character, dealer verified in Erbil.',
+    category: 'SUV',
+    engineCc: 1999,
+    horsepower: 187,
+    features: ['Digital Cockpit', 'Hyundai Smart Sense', 'Wireless Apple CarPlay', 'Panoramic Display', 'Blind Spot'],
+    description: 'Hyundai Tucson 2023 in white, only 10,000 km. Features Hyundai Smart Sense safety suite, 12.3-inch digital cockpit, wireless Apple CarPlay, and panoramic display. Stylish SUV with modern design and excellent fuel economy.',
+    coverImage: 'https://images.unsplash.com/photo-1621007947382-bb3c3968e3bb?w=800&q=80',
+    phone: '+9647701000009',
   },
   {
-    id: '12',
-    title: 'Toyota Prado 2021',
-    brand: 'Toyota',
-    model: 'Prado',
+    id: '10',
+    title: 'Nissan Patrol 2021',
+    brand: 'Nissan',
+    model: 'Patrol',
     year: 2021,
-    mileageKm: 55000,
-    priceUsd: 54000,
-    priceIqd: 70740000,
-    fuelType: 'diesel',
+    mileageKm: 35000,
+    priceUsd: 55000,
+    priceIqd: 71900000,
+    fuelType: 'petrol',
     transmission: 'automatic',
-    color: 'Gray',
-    city: 'Sulaymaniyah',
+    color: 'Black',
+    city: 'Baghdad',
     sellerType: 'dealer',
     isVerified: true,
     category: 'SUV',
-    engineCc: 2755,
-    horsepower: 204,
-    features: ['4WD', 'Leather', 'Navigation', 'Sunroof', 'Rear Camera', 'Kinetic Dynamic Suspension'],
-    description: 'Toyota Prado 2021 diesel in gray. 2.8L engine with 204 HP, automatic transmission, 4WD. 55,000 km. Leather interior, navigation, sunroof, rear camera, and kinetic dynamic suspension. Reliable off-road capability, dealer verified in Sulaymaniyah.',
+    engineCc: 5552,
+    horsepower: 400,
+    features: ['4WD', 'Leather Seats', 'Sunroof', 'Navigation', 'Reverse Camera'],
+    description: 'Nissan Patrol 2021 Y62 in black. 5.5L V8 engine with 400 HP, legendary off-road capability. Full leather interior, sunroof, navigation system, and reverse camera. Excellent condition, dealer maintained. The ultimate family SUV.',
+    coverImage: 'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=800&q=80',
+    phone: '+9647701000010',
+  },
+  {
+    id: '11',
+    title: 'Honda Accord 2023',
+    brand: 'Honda',
+    model: 'Accord',
+    year: 2023,
+    mileageKm: 6000,
+    priceUsd: 26000,
+    priceIqd: 34040000,
+    fuelType: 'petrol',
+    transmission: 'automatic',
+    color: 'Red',
+    city: 'Sulaymaniyah',
+    sellerType: 'private',
+    isVerified: false,
+    category: 'Sedan',
+    engineCc: 1498,
+    horsepower: 192,
+    features: ['Honda Sensing', 'Apple CarPlay', 'Android Auto', 'LED Headlights', 'Wireless Charging'],
+    description: 'Honda Accord 2023 in striking red, only 6,000 km. Turbocharged 1.5L engine with 192 HP. Equipped with Honda Sensing safety suite, wireless Apple CarPlay, LED headlights, and wireless charging. Private seller, like-new condition.',
+    coverImage: 'https://images.unsplash.com/photo-1625231334168-311ade7cf5e3?w=800&q=80',
+    phone: '+9647701000011',
+  },
+  {
+    id: '12',
+    title: 'Lexus RX 2022',
+    brand: 'Lexus',
+    model: 'RX',
+    year: 2022,
+    mileageKm: 18000,
+    priceUsd: 48000,
+    priceIqd: 62880000,
+    fuelType: 'hybrid',
+    transmission: 'automatic',
+    color: 'Silver',
+    city: 'Erbil',
+    sellerType: 'dealer',
+    isVerified: true,
+    category: 'SUV',
+    engineCc: 3456,
+    horsepower: 313,
+    features: ['Mark Levinson Audio', 'Adaptive Suspension', 'Head-Up Display', 'Parking Assist', 'Lexus Safety'],
+    description: 'Lexus RX 450h 2022 in silver metallic. 3.5L V6 hybrid with 313 HP. Mark Levinson premium audio, adaptive variable suspension, head-up display, and advanced parking assist. Exceptional build quality, dealer serviced.',
+    coverImage: 'https://images.unsplash.com/photo-1606152421811-aa6c3ce47725?w=800&q=80',
+    phone: '+9647701000012',
   },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-export function formatPriceUSD(amount: number): string {
-  const str = Math.round(amount).toString();
-  return '$' + str.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function formatMileage(km: number): string {
+  if (km >= 1000) {
+    return `${(km / 1000).toFixed(km % 1000 === 0 ? 0 : 1)}k km`;
+  }
+  return `${km} km`;
 }
 
-export function formatMileage(km: number): string {
-  return km.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km';
+export function formatPriceUSD(usd: number): string {
+  if (usd >= 1000) {
+    return `$${(usd / 1000).toFixed(usd % 1000 === 0 ? 0 : 1)}k`;
+  }
+  return `$${usd}`;
 }
 
 export function getFuelLabel(fuel: FuelType): string {
-  const map: Record<FuelType, string> = {
+  const labels: Record<FuelType, string> = {
     petrol: 'Petrol',
     diesel: 'Diesel',
     hybrid: 'Hybrid',
     electric: 'Electric',
   };
-  return map[fuel];
+  return labels[fuel];
 }

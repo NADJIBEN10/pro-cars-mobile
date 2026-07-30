@@ -1,3 +1,4 @@
+import { Linking } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -98,7 +99,8 @@ export default function CarDetailScreen() {
                 label: t.call,
                 color: colors.success,
                 onPress: () => {
-                  /* TODO: Link.to tel: */
+                  const url = `tel:${car.phone}`;
+                  Linking.openURL(url).catch(() => {});
                 },
               },
               {
@@ -107,7 +109,8 @@ export default function CarDetailScreen() {
                 label: t.whatsapp,
                 color: '#25D366',
                 onPress: () => {
-                  /* TODO: Link.to WhatsApp */
+                  const url = `https://wa.me/${car.phone}`;
+                  Linking.openURL(url).catch(() => {});
                 },
               },
             ]}

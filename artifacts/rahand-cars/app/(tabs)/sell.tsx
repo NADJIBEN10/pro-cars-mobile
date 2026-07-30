@@ -54,7 +54,7 @@ export default function SellScreen() {
         {/* CTA */}
         <Pressable
           style={[styles.startBtn, { backgroundColor: 'white', borderRadius: colors.radius }]}
-          onPress={() => {}}
+          onPress={() => router.push('/create-listing')}
         >
           <Feather name="plus-circle" size={20} color={colors.accent} />
           <Text style={[styles.startBtnText, { color: colors.accent, fontFamily: fonts.bodySemiBold }]}>

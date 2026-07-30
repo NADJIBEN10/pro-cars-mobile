@@ -16,37 +16,41 @@ interface CarImageGalleryProps {
 
 export function CarImageGallery({ images, brand }: CarImageGalleryProps) {
   const colors = useColors();
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  if (images.length > 0) {
+  if (images.length === 0 || error) {
     return (
-      <Image
-        source={{ uri: images[0] }}
-        style={styles.image}
-        contentFit="cover"
-        accessibilityLabel={brand ? `${brand} car photo` : 'Car photo'}
-      />
+      <LinearGradient
+        colors={[colors.primary + '60', colors.primaryGlow + '30', colors.accent + '20']}
+        style={styles.hero}
+      >
+        <View style={styles.heroIcon}>
+          <Feather
+            name="camera"
+            size={40}
+            color={colors.primary + '80'}
+            accessibilityElementsHidden
+          />
+          {brand && (
+            <Text style={[styles.heroBrand, { color: colors.primary + '80', fontFamily: fonts.bodyMedium }]}>
+              {brand}
+            </Text>
+          )}
+        </View>
+      </LinearGradient>
     );
   }
 
   return (
-    <LinearGradient
-      colors={[colors.primary + '60', colors.primaryGlow + '30', colors.accent + '20']}
-      style={styles.hero}
-    >
-      <View style={styles.heroIcon}>
-        <Feather
-          name="camera"
-          size={40}
-          color={colors.primary + '80'}
-          accessibilityElementsHidden
-        />
-        {brand && (
-          <Text style={[styles.heroBrand, { color: colors.primary + '80', fontFamily: fonts.bodyMedium }]}>
-            {brand}
-          </Text>
-        )}
-      </View>
-    </LinearGradient>
+    <Image
+      source={{ uri: images[0] }}
+      style={styles.image}
+      contentFit="cover"
+      onLoad={() => setLoading(false)}
+      onError={() => setError(true)}
+      accessibilityLabel={brand ? `${brand} car photo` : 'Car photo'}
+    />
   );
 }
 
