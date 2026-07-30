@@ -1,54 +1,77 @@
 # 🐞 Rahand Cars - Known Issues
 
-This document tracks all known issues, bugs, and technical improvements.
+This document tracks all known issues, bugs, technical debt, and future improvements.
 
 ---
 
-## High Priority
+# Active Issues
+
+At the moment, there are no active high-priority issues.
+
+---
+
+## ✅ Resolved Issues
 
 ### ISSUE-001
 
 **Title**
-Expo Go icons display as Chinese characters or squares.
+
+Expo Go icons displayed as Chinese characters or square placeholders.
 
 **Priority**
+
 High
 
 **Status**
-Open
 
-**Description**
-Vector icons are not rendering correctly in Expo Go. Icons appear as Chinese characters or square placeholders instead of the expected icons.
+Resolved ✅
 
-**Next Action**
-Investigate font loading and @expo/vector-icons configuration.
+**Root Cause**
+
+The application was using invalid Feather icon names (such as `car`), which are not supported by the Feather icon set.
+
+**Resolution**
+
+Vehicle icons were migrated to **MaterialCommunityIcons**, which provides a complete automotive icon collection. The tab navigation was also updated to use the correct icon family.
 
 ---
-
-## Medium Priority
 
 ### ISSUE-002
 
 **Title**
-Verify useColors TypeScript compatibility.
+
+Verify `useColors.ts` TypeScript compatibility.
 
 **Priority**
+
 Medium
 
 **Status**
-Needs Verification
 
-**Description**
-A previous review reported a TypeScript type issue in `hooks/useColors.ts`. Verify that the latest repository no longer contains this issue.
+Resolved ✅
 
----
+**Resolution**
 
-## Low Priority
-
-No issues recorded.
+The incorrect TypeScript type cast in `hooks/useColors.ts` was corrected. The project now passes TypeScript type checking with zero errors.
 
 ---
 
-# Future Issues
+# Technical Debt
 
-Add new issues here as they are discovered.
+No technical debt has been identified at this stage.
+
+---
+
+# Future Monitoring
+
+The following items should continue to be monitored during future development:
+
+- Performance as the number of screens increases.
+- Supabase integration once real backend services are connected.
+- RTL layout consistency after new screens are added.
+- Accessibility improvements.
+- Animation performance on lower-end Android devices.
+
+---
+
+Last Updated: July 2026
