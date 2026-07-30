@@ -90,3 +90,23 @@ Planned Features
 ---
 
 Last Updated: July 2026
+# [0.2.0] - UI Foundation
+
+## Added
+
+- Home Screen
+- Search Screen
+- Favorites Screen
+- Account Screen
+- Category Cards
+- Brand Cards
+- Empty States
+
+## Fixed
+
+- Expo Go icon issue
+- TypeScript errors
+
+## Changed
+
+- Replaced Feather vehicle icons with MaterialCommunityIcons.
